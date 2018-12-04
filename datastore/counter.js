@@ -41,11 +41,8 @@ const writeCounter = (count, callback) => {
 exports.getNextUniqueId = (callback = console.log) => {
   readCounter((err, data) => {
     counter = data + 1;
-    console.log(data, 'rightThere');
-    writeCounter(counter, (err, Data)=> {
-      console.log(counter, 'righthere');
-      callback(err, Data);
-    });
+    writeCounter(counter, callback);
+    return counter;
   });
   
 };

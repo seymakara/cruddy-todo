@@ -8,10 +8,23 @@ var items = {};
 // Public API - Fix these CRUD functions ///////////////////////////////////////
 
 exports.create = (text, callback) => {
-  var id = counter.getNextUniqueId();
-  console.log("ID AT CREATE", id);
-  items[id] = text;
-  callback(null, { id, text });
+  var id = counter.getNextUniqueId((err, countString) => {
+    fs.writeFile(`${exports.dataDir}/${countString}.txt`, text, (err) => {
+      if (err) {
+        throw err;
+      } else {
+        const contents = {
+          text: text,
+          id: countString
+        };
+        callback(null, contents);
+        // console.log('The message been saved!', fs.readdirSync(exports.dataDir).length, exports.dataDir );
+      }
+    });
+  });
+  // console.log("ID AT CREATE", id);
+  // items[id] = text;
+  // callback(null, { id, text });
 };
 
 exports.readAll = (callback) => {
