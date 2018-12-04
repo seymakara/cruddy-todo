@@ -28,21 +28,33 @@ exports.readAll = (callback) => {
   fs.readdir(exports.dataDir, (err, files) => {
     files.map((file) => {
       const content = {
-        id: file.slice(0,5),
-        text: file.slice(0,5)
+        id: file.slice(0, 5),
+        text: file.slice(0, 5)
       };
       data.push(content);
     });
     callback(null, data);
   });
-}
+};
 exports.readOne = (id, callback) => {
-  var text = items[id];
-  if (!text) {
-    callback(new Error(`No item with id: ${id}`));
-  } else {
-    callback(null, { id, text });
-  }
+  // var text = items[id];
+  // if (!text) {
+  //   callback(new Error(`No item with id: ${id}`));
+  // } else {
+  //   callback(null, { id, text });
+  // }
+  fs.readFile(`${exports.dataDir}/${id}.txt`, (err, text) => {
+    if (err) {
+      callback(err, 0);
+    } else {
+      const contents = {
+        id: id,
+        text: String(text)
+      };
+      callback(err, contents);
+    }
+  });
+
 };
 
 exports.update = (id, text, callback) => {
