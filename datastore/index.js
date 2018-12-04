@@ -37,12 +37,6 @@ exports.readAll = (callback) => {
   });
 };
 exports.readOne = (id, callback) => {
-  // var text = items[id];
-  // if (!text) {
-  //   callback(new Error(`No item with id: ${id}`));
-  // } else {
-  //   callback(null, { id, text });
-  // }
   fs.readFile(`${exports.dataDir}/${id}.txt`, 'utf8', (err, text) => {
     if (err) {
       callback(err, 0);
@@ -54,37 +48,9 @@ exports.readOne = (id, callback) => {
       callback(err, contents);
     }
   });
-
 };
 
 exports.update = (id, text, callback) => {
-  // if (files.includes(`${id}.txt`)) {
-  //   console.log('ID exists');
-  //   fs.writeFile(`${exports.dataDir}/${id}.txt`, text, (err) => {
-  //     if (err) {
-  //       console.log('here')
-  //     } else {
-  //       callback(err, text);
-  //     }
-  //   });
-  // } else {
-  //   console.log('ID does not exist');
-  // }
-
-  // if (err) {
-  //   callback(err, 0);
-  // } else {
-  //   if (files.includes(`${id}.text`)) {
-  //     fs.writeFile(`${exports.dataDir}/${id}.txt`, text, (err) => {
-  //       if (err) {
-  //         console.log('here');
-  //         return;
-  //       } else {
-  //         callback(null, text);
-  //       }
-  //     });
-  //   }
-  // }
   fs.access(`${exports.dataDir}/${id}.txt`, fs.constants.F_OK, (err) => {
     if (err) {
       callback(err, 'error at access');
@@ -98,26 +64,16 @@ exports.update = (id, text, callback) => {
       });
     }
   });
-  
-
-  // var item = items[id];
-  // if (!item) {
-  //   callback(new Error(`No item with id: ${id}`));
-  // } else {
-  //   items[id] = text;
-  //   callback(null, { id, text });
-  // }
 };
 
 exports.delete = (id, callback) => {
-  var item = items[id];
-  delete items[id];
-  if (!item) {
-    // report an error if item not found
-    callback(new Error(`No item with id: ${id}`));
-  } else {
-    callback();
-  }
+  fs.unlink(`${exports.dataDir}/${id}.txt`, (err) => {
+    if (err) {
+      callback(err);
+    } else {
+      callback(null);
+    }
+  });
 };
 
 // Config+Initialization code -- DO NOT MODIFY /////////////////////////////////
