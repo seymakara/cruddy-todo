@@ -43,13 +43,13 @@ exports.readOne = (id, callback) => {
   // } else {
   //   callback(null, { id, text });
   // }
-  fs.readFile(`${exports.dataDir}/${id}.txt`, (err, text) => {
+  fs.readFile(`${exports.dataDir}/${id}.txt`, 'utf8', (err, text) => {
     if (err) {
       callback(err, 0);
     } else {
       const contents = {
-        id: id,
-        text: String(text)
+        id,
+        text
       };
       callback(err, contents);
     }
@@ -58,13 +58,55 @@ exports.readOne = (id, callback) => {
 };
 
 exports.update = (id, text, callback) => {
-  var item = items[id];
-  if (!item) {
-    callback(new Error(`No item with id: ${id}`));
-  } else {
-    items[id] = text;
-    callback(null, { id, text });
-  }
+  // if (files.includes(`${id}.txt`)) {
+  //   console.log('ID exists');
+  //   fs.writeFile(`${exports.dataDir}/${id}.txt`, text, (err) => {
+  //     if (err) {
+  //       console.log('here')
+  //     } else {
+  //       callback(err, text);
+  //     }
+  //   });
+  // } else {
+  //   console.log('ID does not exist');
+  // }
+
+  // if (err) {
+  //   callback(err, 0);
+  // } else {
+  //   if (files.includes(`${id}.text`)) {
+  //     fs.writeFile(`${exports.dataDir}/${id}.txt`, text, (err) => {
+  //       if (err) {
+  //         console.log('here');
+  //         return;
+  //       } else {
+  //         callback(null, text);
+  //       }
+  //     });
+  //   }
+  // }
+  fs.access(`${exports.dataDir}/${id}.txt`, fs.constants.F_OK, (err) => {
+    if (err) {
+      callback(err, 'error at access');
+    } else {
+      fs.writeFile(`${exports.dataDir}/${id}.txt`, text, (err) => {
+        if (err) {
+          callback(err, 'here');
+        } else {
+          callback(null, {id, text});
+        }
+      });
+    }
+  });
+  
+
+  // var item = items[id];
+  // if (!item) {
+  //   callback(new Error(`No item with id: ${id}`));
+  // } else {
+  //   items[id] = text;
+  //   callback(null, { id, text });
+  // }
 };
 
 exports.delete = (id, callback) => {
