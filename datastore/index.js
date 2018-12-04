@@ -9,6 +9,7 @@ var items = {};
 
 exports.create = (text, callback) => {
   var id = counter.getNextUniqueId();
+  console.log("ID AT CREATE", id);
   items[id] = text;
   callback(null, { id, text });
 };
