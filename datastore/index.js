@@ -18,23 +18,24 @@ exports.create = (text, callback) => {
           id: countString
         };
         callback(null, contents);
-        // console.log('The message been saved!', fs.readdirSync(exports.dataDir).length, exports.dataDir );
       }
     });
   });
-  // console.log("ID AT CREATE", id);
-  // items[id] = text;
-  // callback(null, { id, text });
 };
 
 exports.readAll = (callback) => {
-  var data = [];
-  _.each(items, (text, id) => {
-    data.push({ id, text });
+  let data = [];
+  fs.readdir(exports.dataDir, (err, files) => {
+    files.map((file) => {
+      const content = {
+        id: file.slice(0,5),
+        text: file.slice(0,5)
+      };
+      data.push(content);
+    });
+    callback(null, data);
   });
-  callback(null, data);
-};
-
+}
 exports.readOne = (id, callback) => {
   var text = items[id];
   if (!text) {
